@@ -1,0 +1,32 @@
+COP4634 Sys & Net I Project 4: File Systems Fall 2023
+
+1) Display the information in the superblock, the number of i-nodes free and in use, and the number of disk
+blocks free and in use.
+
+2) Perform consistency checking. This means that the test code must determine that the sum of the number
+of free disk blocks and the number of used disk blocks for data, superblock, and i-nodes is equal to the total
+number of disk blocks of the disk.
+
+3) Create a binary file using your file system, write and read data of arbitrary size to the file, and close the file.
+The IO operations should closely resemble the equivalent IO operation of a regular file system. This means
+the following:
+
+a) Files need to be created when they are opened for write operations and don’t exist.
+b) Open files must grow in size with every write operation, allowing the data to be appended to the existing data in the file.
+c) Files cannot be opened for reading operations if they don’t exist.
+d) Files exist in the directory after they are closed.
+e) All open files are managed in a system-wide open file table.
+
+Keep in mind that several independent write operations to a file must ensure that the file pointer moves along as
+bytes are written to the file, indicating after every complete write operation the end of the file where the next byte
+can be written. As data is written into the blocks, the last block of a file may only be partially filled.
+
+IMPLEMENTATION SUGGESTIONS
+
+To start this project, download the C++ files in the course shell in Canvas. Files disk.cpp and disk.hpp implement the
+simulated disk for reading and writing binary data blocks. Files filesystem.cpp and filesystem.hpp implement a
+rudimentary file system. The header files superblock.hpp and inode.hpp describe the superblock and i-node data
+structures. Both the superblock and a single i-node must each fit within a single disk block
+
+The header files superblock.hpp and inode.hpp describe the superblock and i-node data
+structures. Both the superblock and a single i-node must each fit within a single disk block

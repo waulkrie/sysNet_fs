@@ -1,0 +1,3 @@
+C:/Users/anon/projects/sysNet1_fs/cmake-build-debug/CMakeFiles/sysNet1_fs.dir
+C:/Users/anon/projects/sysNet1_fs/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/anon/projects/sysNet1_fs/cmake-build-debug/CMakeFiles/rebuild_cache.dir
