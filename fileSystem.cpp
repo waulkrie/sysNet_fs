@@ -22,7 +22,10 @@ void FileSystem::format( int diskSizeInKB, string& path )
     // create a disk; any exception will be returned to the caller
 	_disk = new Disk(diskSizeInKB, path);
     //      FD*   _openFiles[NUM_INODES];
-
+	superBlock sb = new superBlock();
+	sb->_sizeInKB = diskSizeInKB;
+	sb->_physicalDisk = path;
+	
 	
     // complete implementation of this function
     // you must use the functions read/writeSuperblock() & read/writeInode()
