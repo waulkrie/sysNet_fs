@@ -156,8 +156,11 @@ void FileSystem::writeSuperBlock(SuperBlock& superBlock )
 		_disk->writeBlock(blocks, buffer, BLOCK_SIZE);
 		blocks--;
 	}
+
+	// Inode is the size of a block
 	int inodes = superBlock.getNumberOfInodes();
-	cout << "writing inodes: " << inodes << '\n';
+	cout << "size of inode : " << sizeof(Inode) << endl;
+	cout << "writing inodes: " << inodes << endl;
 	while (inodes)
 	{
 		_disk->writeBlock(inodes, buffer, BLOCK_SIZE);
@@ -175,7 +178,7 @@ void FileSystem::writeSuperBlock(SuperBlock& superBlock )
 */
 void FileSystem::readInode(Inode& inode, int blockNumber)
 {
-	char block[BLOCK_SIZE];
+	char block[BLOCK_SIZE] = {0};
 	
 	try {
 		// read block containing the Inode
