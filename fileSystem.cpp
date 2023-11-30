@@ -5,6 +5,10 @@
  */
 
 #include <stdexcept>
+#include <iostream>
+#include <cstring>
+
+
  
 #include "fileSystem.hpp"
 #include "inode.hpp"
@@ -22,7 +26,7 @@ void FileSystem::format( int diskSizeInKB, string& path )
     // create a disk; any exception will be returned to the caller
 	_disk = new Disk(diskSizeInKB, path);
     //      FD*   _openFiles[NUM_INODES];
-	SuperBlock* sb = new SuperBlock(diskSizeInKB, NUM_INODES, 1);
+	SuperBlock* sb = new SuperBlock(diskSizeInKB-1, NUM_INODES-1, 1);
 	writeSuperBlock(*sb);
 	
 	
@@ -122,22 +126,38 @@ SuperBlock* FileSystem::readSuperBlock( )
 void FileSystem::writeSuperBlock(SuperBlock& superBlock )
 {
 	// setup buffer to be written to disk
-	char buffer[BLOCK_SIZE];
+	char buffer[BLOCK_SIZE] = {0};
 			
 	// write number of disk blocks into buffer
 	intToByteArray( superBlock.getNumberOfDiskBlocks(), buffer, 0);
 			
 	// write number of inodes into buffer
-	intToByteArray( superBlock.getNumberOfInodes(), buffer, 4);
-	 
-    // finish this function
+	intToByteArray(superBlock.getNumberOfInodes(), buffer, 4);
+
+	// finish this function
+	/**
+	 * The superblock is the first block (block 0) on the disk. It contains information
+	 *  about the number of blocks on the file system, the number of i-nodes,
+	 *  and the index of the first block in the free list.
+	 *  The list of i-node blocks following the superblock is needed to implement files. 
+	*/
+	// write first free block to disk
+	intToByteArray(superBlock.getFirstBlockFreeList(), buffer, 8);
 	int blocks = superBlock.getNumberOfDiskBlocks();
+
+	// write the superblock to disk
+	_disk->writeBlock(0, buffer, BLOCK_SIZE);
+	memset(buffer, 0, BLOCK_SIZE);
+	
+	// write free blocks and inodes to disk
+	cout << "writing blocks: " << blocks << '\n';
 	while (blocks)
 	{
 		_disk->writeBlock(blocks, buffer, BLOCK_SIZE);
 		blocks--;
 	}
 	int inodes = superBlock.getNumberOfInodes();
+	cout << "writing inodes: " << inodes << '\n';
 	while (inodes)
 	{
 		_disk->writeBlock(inodes, buffer, BLOCK_SIZE);

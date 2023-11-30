@@ -79,6 +79,8 @@ int Disk::readBlock( int blockNumber, char* blockData )
  */
 int Disk::writeBlock( int blockNumber, const char* blockData, int numberOfBytes  )
 {
+	cout << "Disk::writeBlock num:" << blockNumber << endl;
+	cout << "Disk::writeBlock len:" << numberOfBytes << endl;
 	int error, count;
 	if ((blockNumber >= _sizeInKB) || (blockNumber < 0)) {
 		throw invalid_argument("Invalid block number");

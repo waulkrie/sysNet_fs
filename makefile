@@ -1,4 +1,4 @@
-CFLAGS = -g -Wall -std=c++14 -municode
+CFLAGS = -g -Wall -std=c++14
 CC = g++
 PROG_NAME=fs
 
