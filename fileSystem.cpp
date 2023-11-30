@@ -22,9 +22,8 @@ void FileSystem::format( int diskSizeInKB, string& path )
     // create a disk; any exception will be returned to the caller
 	_disk = new Disk(diskSizeInKB, path);
     //      FD*   _openFiles[NUM_INODES];
-	superBlock sb = new superBlock();
-	sb->_sizeInKB = diskSizeInKB;
-	sb->_physicalDisk = path;
+	SuperBlock* sb = new SuperBlock(diskSizeInKB, NUM_INODES, 1);
+	writeSuperBlock(*sb);
 	
 	
     // complete implementation of this function
@@ -132,6 +131,19 @@ void FileSystem::writeSuperBlock(SuperBlock& superBlock )
 	intToByteArray( superBlock.getNumberOfInodes(), buffer, 4);
 	 
     // finish this function
+	int blocks = superBlock.getNumberOfDiskBlocks();
+	while (blocks)
+	{
+		_disk->writeBlock(blocks, buffer, BLOCK_SIZE);
+		blocks--;
+	}
+	int inodes = superBlock.getNumberOfInodes();
+	while (inodes)
+	{
+		_disk->writeBlock(inodes, buffer, BLOCK_SIZE);
+		inodes--;
+	}
+	
 }
 	 
 /**
