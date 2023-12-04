@@ -148,24 +148,26 @@ void FileSystem::writeSuperBlock(SuperBlock& superBlock )
 	// write the superblock to disk
 	_disk->writeBlock(0, buffer, BLOCK_SIZE);
 	memset(buffer, 0, BLOCK_SIZE);
-	
+
+    // Inode is the size of a block
+    int inodes = superBlock.getNumberOfInodes();
+    cout << "size of inode : " << sizeof(Inode) << endl;
+    cout << "writing inodes: " << inodes << endl;
+    Inode temp(0, 0, 0, (string &) " ");
+    while (inodes)
+    {
+//        _disk->writeBlock(inodes, buffer, BLOCK_SIZE);
+        writeInode(temp, inodes);
+        inodes--;
+    }
 	// write free blocks and inodes to disk
-	cout << "writing blocks: " << blocks << '\n';
+	cout << "writing blocks: " << blocks << endl;
 	while (blocks)
 	{
 		_disk->writeBlock(blocks, buffer, BLOCK_SIZE);
 		blocks--;
 	}
 
-	// Inode is the size of a block
-	int inodes = superBlock.getNumberOfInodes();
-	cout << "size of inode : " << sizeof(Inode) << endl;
-	cout << "writing inodes: " << inodes << endl;
-	while (inodes)
-	{
-		_disk->writeBlock(inodes, buffer, BLOCK_SIZE);
-		inodes--;
-	}
 	
 }
 	 
@@ -188,6 +190,10 @@ void FileSystem::readInode(Inode& inode, int blockNumber)
 	}
 
     // finish implementing this method
+    for(size_t i = 0; i < BLOCK_SIZE; i++)
+    {
+        ((char*) &inode)[i] = block[i];
+    }
 
 }
 	 
@@ -200,7 +206,11 @@ void FileSystem::readInode(Inode& inode, int blockNumber)
 */
 void FileSystem::writeInode(Inode& inode, int blockNumber)
 {
-	// implement this function
+//    char buffer[BLOCK_SIZE] = {0};
+    char* ptr = (char*) &inode;
+    _disk->writeBlock( blockNumber, ptr, BLOCK_SIZE );
+
+
 }
 	 
 /**

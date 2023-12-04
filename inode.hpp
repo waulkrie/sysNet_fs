@@ -45,6 +45,6 @@ class Inode
 		int getPointer(int index);
 		
 		void setPointer (int pointer, int index);
-};
+} __attribute__((packed));
 
 #endif /*INODE_H_*/

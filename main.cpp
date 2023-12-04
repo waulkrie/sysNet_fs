@@ -17,7 +17,7 @@ using namespace std;
 */
 int main(int argc, char* argv[])
 {
-	FileSystem fileSystem;
+	FileSystem fileSystem {};
 
     string filename = "./disk1.bin";
 	
